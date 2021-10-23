@@ -19,7 +19,7 @@ namespace NotionIntegration
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
-                    .UseKestrel(options => options.Listen(IPAddress.Loopback, 3000));
+                    .UseKestrel(options => options.Listen(IPAddress.Parse("0.0.0.0"), 3000));
                 });
     }
 }

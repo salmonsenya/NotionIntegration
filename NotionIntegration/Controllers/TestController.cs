@@ -9,7 +9,7 @@ namespace NotionIntegration.Controllers
         [Route("health")]
         public IActionResult Index()
         {
-            return Ok();
+            return Ok("NotionIntegration is alive.");
         }
     }
 }
