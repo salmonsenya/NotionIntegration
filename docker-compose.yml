@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   notionintegration:
+    container_name: web
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
     ports:
@@ -9,3 +10,14 @@ services:
     build:
       context: .
       dockerfile: NotionIntegration/Dockerfile
+    depends_on: [ mssql ]
+  mssql:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: mssql
+    hostname: mssql
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: "Y"
+    restart: unless-stopped
+    ports:
+      - "11433:1433"

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NotionIntegration.Repositories;
 
 namespace NotionIntegration
 {
@@ -18,6 +19,8 @@ namespace NotionIntegration
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
+            services.Configure<NotesOptions>(Configuration.GetSection("ConnectionStrings"));
+            services.AddSingleton<INotesRepository, NotesRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
