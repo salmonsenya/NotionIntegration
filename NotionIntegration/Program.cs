@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -18,8 +14,7 @@ namespace NotionIntegration
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
-                    .UseKestrel(options => options.Listen(IPAddress.Parse("0.0.0.0"), 3000));
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
