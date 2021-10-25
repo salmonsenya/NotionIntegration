@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using NotionIntegration.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,15 +8,19 @@ namespace NotionIntegration.Repositories
 {
     public class NotesRepository : INotesRepository
     {
-        public readonly IOptions<NotesOptions> _notesOptions;
-        public NotesRepository(IOptions<NotesOptions> options)
+        private readonly DbContextOptions<NotesContext> _options;
+        private const string CONNECTION_STRING = "mssql";
+
+        public NotesRepository(IConfiguration configuration)
         {
-            _notesOptions = options ?? throw new ArgumentNullException(nameof(options));
+            var _optionsBuilder = new DbContextOptionsBuilder<NotesContext>()
+                .UseSqlServer(configuration.GetConnectionString(CONNECTION_STRING));
+            _options = _optionsBuilder.Options;
         }
 
         public async Task AddNoteAsync(Note note)
         {
-            using var _notesContext = new NotesContext(_notesOptions);
+            using var _notesContext = new NotesContext(_options);
             await _notesContext.Notes.AddAsync(note);
             await _notesContext.SaveChangesAsync();
         }
@@ -25,14 +28,14 @@ namespace NotionIntegration.Repositories
         public async Task AddNoteAsync(string text)
         {
             var note = new Note { Text = text };
-            using var _notesContext = new NotesContext(_notesOptions);
+            using var _notesContext = new NotesContext(_options);
             await _notesContext.Notes.AddAsync(note);
             await _notesContext.SaveChangesAsync();
         }
 
         public async Task<List<Note>> GetNotesAsync()
         {
-            using var _notesContext = new NotesContext(_notesOptions);
+            using var _notesContext = new NotesContext(_options);
             return await _notesContext.Notes.ToListAsync();
         }
     }
